@@ -1,6 +1,7 @@
-**存储过程（Stored Procedure）**是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象
+**存储过程（Stored Procedure是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象
 MySQL 5.0 版本开始支持存储过程
-存储过程 = 数据库 SQL 语言层面的代码封装与重用
+存储过程 = 数据库 SQL 语言层面的代码封装与重用**
+
  - 声明语句结束符 DELIMITER $$ or DELIMITER //
  - 声明存储过程 CREATE PROCEDURE UpdateAuthGroup(in _id int, _rules text)
  - 存储过程开始和结束符号 BEGIN .... END 
