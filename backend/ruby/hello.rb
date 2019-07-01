@@ -103,3 +103,57 @@ if __FILE__ == $0
   mg.say_hi
   mg.say_bye
 end
+
+# 存取器
+# 直接访问实例变量或对实例变量赋值
+class HelloWorld
+  def initialize(myname = "Ruby")
+    @name = myname
+  end
+  def name
+    @name
+  end
+  def name=(value)
+    @name = value
+  end
+  def hello
+    puts "Hello, world. I am #{@name}." 
+  end
+end
+
+bob = HelloWorld.new("Bob")
+alice = HelloWorld.new("Alice")
+ruby = HelloWorld.new
+p bob.name
+p bob.name = "liulu"
+bob.hello
+
+class << HelloWorld
+  def hello(name)
+    puts "#{name} said hello."
+  end
+end
+HelloWorld.hello("John")
+
+class HelloWorld
+  class << self
+    def hello(name)
+      puts "#{name} said hello."
+    end
+  end
+end
+HelloWorld.hello("John")
+
+def HelloWorld.hello(name)
+  puts "#{name} said hello."
+end
+
+HelloWorld.hello("John")
+
+class HelloWorld
+  def self.hello(name)
+    puts "#{name} said hello."
+  end
+end
+
+HelloWorld.hello("John")
