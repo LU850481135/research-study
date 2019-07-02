@@ -157,3 +157,87 @@ class HelloWorld
 end
 
 HelloWorld.hello("John")
+
+
+class HelloCount
+  # 调用hello 方法的次数
+  @@count = 0
+  # 读取调用次数的类方法
+  def HelloCount.count
+    @@count
+  end
+  def initialize(myname="Ruby")
+    @name = myname
+  end
+  def hello
+    @@count += 1 # 累加调用次数
+    puts "Hello, world. I am #{@name}.\n"
+  end
+end
+
+bob = HelloCount.new("Bob")
+alice = HelloCount.new("Alice")
+ruby = HelloCount.new
+p HelloCount.count
+# => 0
+bob.hello
+# Hello, world. I am Bob.
+alice.hello
+# Hello, world. I am Alice.
+ruby.hello
+# Hello, world. I am Ruby.
+p HelloCount.count
+# => 3
+
+
+# public 与 private
+class AccTest
+  def pub
+    puts "pub is a public method."
+  end
+  public :pub # 把pub 方法设定为public（可省略）
+  def priv
+    puts "priv is a private method."
+  end
+  private :priv # 把priv 方法设定为private
+end
+
+acc = AccTest.new
+acc.pub
+# pub is a public method.
+# acc.priv
+# NoMethodError
+
+# 块
+# yield 语句
+def total(from, to)
+  result = 0
+  from.upto(to) do |num|
+    if block_given?
+      result += yield(num)
+    else
+      result += num
+    end
+  end
+  return result
+end
+
+p total(1, 10)
+p total(1, 10){|num| num ** 2 }
+
+# 将块封装为对象
+# &block
+def total(from, to, &block)
+  result = 0
+  from.upto(to) do |num|
+    if block
+      result += block.call(num)
+    else
+      result += num
+    end
+  end
+  return result
+end
+
+p total(1, 10)
+p total(1, 10){|num| num ** 2 }

@@ -97,7 +97,14 @@ print "体积=", volume, "\n"
 ```puts "表面积 = #{area}"```
 
 ## 1.9 注释
-```Ruby 用#表示注释的开始```
+```单行注释以 # 字符开始```
+```多行注释使用 =begin 和 =end 语法```
+
+```=begin```
+这是一个多行注释。
+可扩展至任意数量的行。
+但 =begin 和 =end 只能出现在第一行和最后一行。 
+```=end```
 
 ## 1.10 控制语句
 - 顺序控制：按照程序的编写顺序，从头到尾执行。
@@ -459,15 +466,18 @@ eg: ```字符串对象 "foo" 是 String 类的实例```
 - 局部变量（local variable）以英文字母或者 _ 开头
 - 全局变量（global variable）以 $ 开头
 - 实例变量（instance variable）以 @ 开头
-- 类变量（class variable）以 @@ 开头
+- 类变量（class variable）以 @@ 开头,且必须初始化后才能在方法定义中使用
 
 特殊变量
 - 伪变量（pseudo variable）预先定义好的代表某特定值的特殊变量,nil、true、false、self
 - 预定义变量（Pre-defined Variable）
 
 ## 4.4 常量
-常量以大写英文字母开头,常量的作用和变量一样，是某个对象的“名片”。不过与变量不同的是，对已经赋值的常量再进行赋值时，Ruby 会做出警
-告
+常量以大写英文字母开头
+**注意**
+- 常量不能定义在方法内
+- 引用一个未初始化的常量会产生错误
+- 对已经初始化的常量赋值会产生警告
 
 ## 4.5 保留字
 在程序中作为名称使用时会受到限制。这些受到限制的单词，我们称为保留字
@@ -1297,4 +1307,685 @@ p HelloWorld::Version
 => "1.0"
 ```
 ### 类变量
-以 @@ 开头的变量称为类变量。类变量是该类所有实例的共享变量，这一点与常量类似，不同的是我们可以多次修改类变量的值
+以 @@ 开头的变量称为类变量。类变量是该类所有实例的```共享变量```，这一点与常量类似，不同的是我们可以多次修改类变量的值,另外，与实例变量一样，从类的外部访问类变量时也需要存取器
+
+```js
+class HelloCount
+  // 调用hello 方法的次数
+  @@count = 0
+  // 读取调用次数的类方法
+  def HelloCount.count
+    @@count
+  end
+  def initialize(myname="Ruby")
+    @name = myname
+  end
+  def hello
+    // 累加调用次数
+    @@count += 1
+    puts "Hello, world. I am #{@name}.\n"
+  end
+end
+
+bob = HelloCount.new("Bob")
+alice = HelloCount.new("Alice")
+ruby = HelloCount.new
+p HelloCount.count
+=> 0
+bob.hello
+=> Hello, world. I am Bob.
+alice.hello
+=> Hello, world. I am Alice.
+ruby.hello
+=> Hello, world. I am Ruby.
+p HelloCount.count
+=> 3
+```
+
+### 限制方法的调用
+- public
+- private
+- protected
+
+```
+class AccTest
+  def pub
+    puts "pub is a public method."
+  end
+  public :pub # 把pub 方法设定为public（可省略）
+  def priv
+    puts "priv is a private method."
+  end
+  private :priv # 把priv 方法设定为private
+end
+
+acc = AccTest.new
+acc.pub
+# pub is a public method.
+acc.priv
+# NoMethodError
+```
+```定义为 protected 的方法，在同一个类（及其子类）中可作为实例方法使用，而在除此以外的地方则无法使用```
+
+## 扩展类
+### 在原有类的基础上添加方法
+
+给String类添加一个计算字符串单词数的实例方法count_word
+```js
+class String
+  def count_word
+    // 用空格分割接收者
+    ary = self.split(/\s+/)
+    // 返回分割后的数组的元素总数
+    return ary.size
+  end
+end
+
+str = "Just Another Ruby Newbie"
+p str.count_word #=> 4
+```
+
+### 继承
+```js
+class 类名 < 父类名
+  类定义
+end
+```
+
+### alias 与 undef
+
+**alias**
+```js
+// 直接使用方法名
+alias 别名 原名
+// 使用符号名
+alias : 别名 : 原名
+```
+
+```js
+// 定义C1
+class C1
+  // 定义hello
+  def hello
+    "Hello"
+  end
+end
+
+// 定义继承了C1 的子类C2
+class C2 < C1
+  // 设定别名old_hello
+  alias old_hello hello
+  // 重定义hello
+  def hello
+    "#{old_hello}, again"
+  end
+end
+
+obj = C2.new
+p obj.old_hello
+=> "Hello"
+p obj.hello
+=> "Hello, again"
+```
+
+**undef**
+```undef 用于删除已有方法的定义```
+```undef 方法名 ```
+```undef : 方法名```
+例如，在子类中希望删除父类定义的方法时可以使用undef
+
+
+**单例类**
+利用单例类定义，就可以给对象添加方法（单例方法）
+```js
+// 只对 str1 对象添加 hello 方法
+str1 = "Ruby"
+str2 = "Ruby"
+class << str1
+  def hello
+    "Hello, #{self}!"
+  end
+end
+
+p str1.hello
+=> "Hello, Ruby!"
+p str2.hello
+=> 错误（NoMethodError）
+```
+```Ruby 中所有的类都是 Class 类的实例，对 Class 类添加实例方法，就等于给所有的类都添加了该类方法。因此，只希望对某个实例添加方法时，就需要利用单例方法```
+
+## 模块
+如果说类表现的是事物的实体及其行为，那么模块表现的就只是事物的行为部分,模块与类有以下两点不同：
+- 模块不能拥有实例
+- 模块不能被继承
+### 命名空间
+通过```include```可以把模块内的方法名、常量名合并到当前的命名空间
+include 可以帮助我们突破继承的限制
+
+```js
+include Math 
+p PI
+=> 3.141592653589793
+// 2 的平方根
+p sqrt(2)
+=> 1.4142135623730951
+```
+
+### 利用 Mix-in 扩展功能
+Mix-in 就是将模块混合到类中
+Mix-in 可以更加灵活地解决下面的问题:
+- 虽然两个类拥有相似的功能，但是不希望把它们作为相同的种类（ Class）来考虑的时候
+- Ruby 不支持父类的多重继承，因此无法对已经继承的类添加共通的功能的时候
+
+```js
+module MyModule
+  // 共通的方法等
+end
+
+class MyClass1
+  include MyModule
+  // MyClass1 中独有的方法
+end
+
+class MyClass2
+  include MyModule
+  // MyClass2 中独有的方法
+end
+```
+
+### 创建模块
+```js
+module 模块名
+  模块定义
+end
+```
+
+```js
+// module 关键字
+module HelloModule
+  // 定义常量
+  Version = "1.0"
+  // 定义方法
+  def hello(name)
+    puts "Hello, #{name}."
+  end
+  // 指定hello 方法为模块函数
+  module_function :hello
+end
+
+p HelloModule::Version
+=> "1.0"
+HelloModule.hello("Alice")
+=> Hello, Alice.
+
+// 包含模块
+include HelloModule
+p Version
+=> "1.0"
+hello("Alice")
+=> Hello, Alice.
+```
+
+调用模块中的方法时,不能以 模块名.方法名 的形式调用
+**module_function**
+如果希望把方法作为模块函数公开给外部使用,就必须使用```module_function```
+
+### include?
+**判断某个类是否包含某个模块**
+```js
+// C类是否包含模块M
+C.include?(M)
+```
+
+## Mix-in
+Ruby 不直接支持多重继承,但通过利用 Mix-in，我们就既可以保持单一继承的关系，又可以同时让多个类共享其他功能
+
+### ancestors
+通过 ancestors 取得继承关系的列表
+### superclass
+通过 superclass 方法则直接返回类的父类
+
+① 同继承关系一样，原类中已经定义了同名的方法时，优先使用该方法
+② 在同一个类中包含多个模块时，优先使用最后一个包含的模块
+③ 嵌套 include 时，查找顺序也是线性的
+```js
+module M1
+  ┊
+end
+
+module M2
+  ┊
+end
+
+module M3
+  include M2
+end
+
+class C
+  include M1
+  include M3
+end
+
+p C.ancestors
+=> [C, M3, M2, M1, Object, Kernel]
+```
+④ 相同的模块被包含两次以上时，第 2 次以后的会被省略
+
+### extend 方法
+extend 方法可以使单例类包含模块，并把模块的功能扩展到对象中
+```extend可以帮助我们跨过类，直接通过模块扩展对象的功能```
+```js
+module Edition
+  def edition(n)
+    "#{self} 第#{n} 版"
+  end
+end
+
+str = "Ruby 基础教程"
+// 将模块Mix-in 进对象
+str.extend(Edition)
+p str.edition(4)
+=> "Ruby 基础教程第4 版"
+```
+
+# 9.运算符
+## 算术运算符
+- +
+- -
+- *
+- /
+- %      求模
+- **     指数
+
+## 比较运算符
+- ==
+- !=
+- >
+- <
+- >=
+- <=
+- <=>
+- ===
+- .eql?             用来判断对象的值是否相等 1.0 == 1 // true  1.0.eql?(1) // false
+- equal?            判断两个对象是否同一个对象（ID 是否相同）
+
+## 赋值运算符
+- =
+- +=
+- -=
+- *=
+- /=
+- %=
+- **=          c **= a 相当于 c = c ** a
+
+## 并行赋值
+```a, b, c = 10, 20, 30```
+
+## 位运算符
+- &
+- |
+- ^
+- ~
+- <<
+- >>
+
+## 逻辑运算符
+- and
+- or
+- &&
+- ||
+- !
+- not
+
+## 三元运算符
+? :
+条件 ? 表达式 1 : 表达式 2
+
+## 范围运算符
+- ..            1..10 从 1 到 10 的范围
+- ...           1...10  从 1 到 9 的范围
+
+## defined? 运算符
+判断传递的表达式是否已定义
+
+## 点运算符 "." 和双冒号运算符 "::"
+
+#  错误处理与异常
+
+在 ```rescue``` 中使用 ```retry``` 后，begin 以下的处理会再重做一遍
+```js
+begin
+  // 可能会发生异常的处理
+rescue => 变量
+  // 发生异常时的处理
+  retry
+ensure
+  // 不管是否发生异常都希望执行的处理
+end
+```
+
+```js
+begin
+   file = open("/unexistant_file")
+   if file
+      puts "File opened successfully"
+   end
+rescue
+   fname = "existant_file"
+   retry
+end
+```
+- 打开时发生异常
+- 跳到 rescue,fname 被重新赋值
+- 通过 retry 跳到 begin 的开头
+- 这次文件成功打开
+- 继续基本的过程
+
+## retry语句
+在 ```rescue``` 中使用 ```retry``` 后，begin 以下的处理会再重做一遍
+## ensure语句
+不管是否发生异常都希望执行的处理
+## raise语句
+主动抛出异常
+
+# 10.块
+```js
+对象. 方法名( 参数列表) do | 块变量 |
+  希望循环的处理
+end
+```
+或者
+```js
+对象. 方法名( 参数列表) { | 块变量 |
+  希望循环的处理
+}
+```
+## yield 语句
+yield 关键字的作用就是执行方法的块
+```js
+def myloop
+  while true
+    // 执行块
+    yield
+  end
+end
+
+// 初始化num
+num = 1
+myloop do
+  // 输出num
+  puts "num is #{num}"
+  // num 超过100 后跳出循环
+  break if num > 100
+  num *= 2
+end
+```
+
+**Integer#upto 方法**
+把 from 到 to 之间的整数值按照从小到大的顺序取出来
+**block_given? 方法**
+用来判断调用该方法时是否有块被传递给方法
+<!-- hello.rb -->
+```js
+def total(from, to)
+  result = 0
+  // 处理从from 到to 的值
+  from.upto(to) do |num|
+    // 如果有块的话
+    if block_given?
+      // 累加经过块处理的值
+      result += yield(num)
+    // 如果没有块的话
+    else
+      // 直接累加
+      result += num
+    end
+  end
+  // 返回方法的结果
+  return result
+end
+
+// 从1 到10 的和
+p total(1, 10)
+=> 55
+// 从1 到10 的2 次幂的和
+p total(1, 10){|num| num ** 2 }
+=> 385
+```
+
+## 控制块的执行
+
+### break
+在块中使用 break，程序会马上返回到调用块的地方
+### next
+在块中使用 next，程序就会中断当前处理，并继续执行下面的处理
+
+### 将块封装为对象
+Proc 对象是能让块作为对象在程序中使用的类
+定义 Proc 对象的典型的方法是，调用 Proc.new 方法这个带块的方法
+在调用 Proc 对象的 call 方法之前，块中定义的程序不会被执行
+
+```js
+hello = Proc.new do | name |
+  puts "hello, #{name}."
+end
+
+hello.call("liulu")
+=> hello liulu
+hello.call("cassie")
+=> hello cassie
+```
+把块从一个方法传给另一个方法时，首先会通过变量将块作为 Proc 对象接收，然后再传给另一个方法。在方法定义时，如果末尾的参数使用“& 参数名”的形式，Ruby 就会自动把调用方法时传进来的块封装为 Proc 对象
+
+<!-- hello.rb -->
+```js
+def total(from, to, &block)
+  result = 0
+  // 处理从from 到to 的值
+  from.upto(to) do |num|
+    // 如果有块的话
+    if block
+      // 累加经过块处理的值
+      result += block.call(num)
+    // 如果没有块的话
+    else
+      // 直接累加
+      result += num
+    end
+  end
+  // 返回方法的结果
+  return result
+end
+
+// 从1 到10 的和
+p total(1, 10)
+=> 55
+// 从1 到10 的2 次幂的和
+p total(1, 10){|num| num ** 2 }
+=> 385
+```
+
+### 局部变量与块变量
+块变量是只能在块内部使用（块局部变量），它不能覆盖外部的局部变量
+```js
+x = y = z = 0
+ary = [1, 2, 3]
+// 使用块变量x，块局部变量y
+ary.each do |x; y|
+  y = x
+  z = x
+  // 确认块内的 x、y、z 的值
+  p [x, y, z]
+  end
+// 确认x、y、z 的值
+puts p [x, y, z]
+
+=> [1, 1, 1]
+=> [2, 2, 2]
+=> [3, 3, 3]
+
+=> [0, 0, 3]
+```
+
+# 11.Ruby 的类
+## 数值（Numeric）类
+### class方法
+判断数值类型
+```1.class```   => Integer
+```1.0.class``` => Float
+
+Ruby 也可以处理有理数和复数。表示有理数用 Rational 类，表示复数用 Complex 类
+### Rational 类
+**Rational( 分子 , 分母 )**
+**Rational#to_f 方法**将其转为Float对象
+```js
+a = Rational(2, 5)
+b = Rational(1, 3)
+p a
+=> (2/5)
+p b
+=> (1/3)
+c = a + b
+p c
+=> (11/15)
+p c.to_f
+=> 0.7333333333333333
+```
+
+### Complex 对象
+**Complex( 实数 , 虚数 )**
+
+# 12.数组
+## 为数组添加元素
+- a.unshift (item)
+- a << item
+  a.push (item)
+- a.concat (b)
+  a + b
+- a [n] = item
+  a [n..m] = item
+  a [n, len] = item
+  把数组 a 指定的部分的元素替换为 item
+
+```js
+// unshift
+a = [1, 2, 3, 4, 5]
+a.unshift(0)
+p a
+=> [0, 1, 2, 3, 4, 5]
+
+// push 或者 <<
+a = [1, 2, 3, 4, 5]
+a << 0
+p a
+=> [1, 2, 3, 4, 5, 0]
+
+// concat 或者 +
+a = [1, 2, 3, 4, 5]
+a.concat([6, 7])
+p a
+=> [1, 2, 3, 4, 5, 6, 7]
+
+// a[n] 或者 a[n..m] 或者 a[n, len]
+a = [1, 2, 3, 4, 5, 6, 7, 8]
+a[2..4] = 0
+p a
+=> [1, 2, 0, 6, 7, 8]
+a[1, 3] = 9
+p a
+=> [1, 9, 7, 8]
+```
+
+## 从数组中删除元素
+- a.compact                   会返回新的数组
+  a.compact!                  直接替换原来的数组
+  从数组 a 中删除所有 nil 元素
+  compact! 方法返回的是删除 nil 元素后的 a，但是如果什么都没有删除的话就会返回 nil
+- a.delete(x)
+  从数组 a 中删除 x 元素
+- a.delete_at(n)
+  从数组中删除 a[n] 元素
+- a.delete_if{|item| … }
+  a.reject{|item| … }
+  a.reject!{|item| … }
+  判断数组 a 中的各元素 item，如果块的执行结果为真，则从数组 a 中删除 item。delete_if 和 reject! 方法都是具有破坏性的方法
+- a.slice!(n)
+  a.slice!(n..m)
+  a.slice!(n, len)
+  删除数组 a 中指定的部分，并返回删除部分的值。slice! 是具有破坏性的方法
+- a.uniq
+  a.uniq!
+  删除数组 a 中重复的元素。uniq! 是具有破坏性的方法
+- a.shift
+  删除数组 a 开头的元素，并返回删除的值
+- a.pop
+  删除数组 a 末尾的元素，并返回删除的值
+
+```js
+// compact!
+a = [1, nil, 3, nil, nil]
+a.compact!
+=> [1, 3]
+p a
+=> [1, 3]
+
+a = [1, 2, 3]
+a.compact!
+=> nil
+p a
+=> [1, 2, 3]
+
+// a.delete(x)
+a = [1, 2, 3, 2, 1]
+a.delete(2)
+p a
+=> [1, 3, 1]
+
+// a.delete_at(n)
+a = [1, 2, 3, 4, 5]
+a.delete_at(2)
+p a
+=> [1, 2, 4, 5]
+
+// a.delete_if{|item| … }
+a = [1, 2, 3, 4, 5]
+a.delete_if{|i| i > 3}
+p a
+=> [1, 2, 3]
+
+// a.slice!(n, len)
+a = [1, 2, 3, 4, 5]
+p a.slice!(1, 2)
+=> [2, 3]
+p a
+=> [1, 4, 5]
+
+// a.uniq!
+a = [1, 2, 3, 4, 3, 2, 1]
+a.uniq!
+p a
+=> [1, 2, 3, 4]
+
+// a.shift
+a = [1, 2, 3, 4, 5]
+a.shift
+p a
+=> [2, 3, 4, 5]
+
+// a.pop
+a = [1, 2, 3, 4, 5]
+a.pop
+p a
+=> [1, 2, 3, 4]
+```
+
+### collect 迭代器
+迭代器是实现循环处理的方法
+collect 迭代器返回集合的所有元素
+```collection = collection.collect```
+```js
+a = 1..5
+b = a.collect{|i| i += 2}
+p b
+=>  [3, 4, 5, 6, 7] 
+```
