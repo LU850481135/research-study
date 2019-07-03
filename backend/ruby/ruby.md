@@ -1855,7 +1855,104 @@ p c.to_f
 ### Complex 对象
 **Complex( 实数 , 虚数 )**
 
+### 除法
+- x.div(y)                    返回 x 除以 y 后的商的整数
+- x.quo(y)                    返回 x 除以 y 后的商，如果 x、y 都是整数则返回 Rational 对象
+- x.modulo(y)                 与 x % y 等价
+- x.divmod(y)                 将 x 除以 y 后的商和余数作为数组返回
+- x.remainder(y)              返回 x 除以 y 的余数，结果的符号与 x 的符号一致
+
+### Math 模块
+
+### to_i / to_f / round / ceil / floor / to_r / to_c
+- to_i                将 Float 对象转换为 Integer 对象
+- to_f                将 Integer 对象转换为 Float 对象
+- round               对小数进行四舍五入处理
+- ceil                向上取整
+- floor               向下取整
+- to_r                将数值转换为 Rational 对象
+- to_c                将数值转换为 Complex 对象
+
+### 随机数
+**Random.rand**
+不指定参数时，Random.rand 方法返回比 1 小的浮点小数。参数为正整数时，返回 0 到该正整数之间的数值
+
+### 计数
+按照数值指定的次数执行循环处理的迭代器
+- n.times{|i| … }
+- from.upto(to){|i| … }
+- from.downto(to){…}
+- from.step(to, step){…}
+```js
+// times
+ary = []
+10.times do | i |
+  ary << i
+end
+p ary
+=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+// upto
+ary = []
+2.upto(10) do | i |
+  ary << i
+end 
+p ary
+=> [2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// downto
+ary = []
+10.downto(2) do | i |
+  ary << i
+end 
+p ary
+=> [10, 9, 8, 7, 6, 5, 4, 3, 2]
+
+// step
+ary = []
+2.step(10, 3) do | i |
+  ary << i
+end 
+p ary
+=> [2, 5, 8]
+
+ary = []
+10.step(2, -3) do |i|
+  ary << i
+end 
+p ary
+=> [10, 7, 4]
+```
+
 # 12.数组
+
+## 使用 %w 与 %i
+**%w**
+创建不包含空白的字符串数组时，可以使用 ```%w```
+```js
+lang = %w(Ruby Perl Python Scheme Pike REBOL)
+p lang
+=> ["Ruby", "Perl", "Python", "Scheme", "Pike", "REBOL"]
+```
+**%i**
+创建符号Symbol）数组的 ```%i```
+```js
+lang = %i(Ruby Perl Python Scheme Pike REBOL)
+p lang
+=> [:Ruby, :Perl, :Python, :Scheme, :Pike, :REBOL]
+```
+
+## to_a
+对象转换为数组
+
+## split
+将对象转换为数组
+```js
+str = "2019/07/03"
+p str.split("/")
+=> ["2019", "07", "03"]
+```
+
 ## 为数组添加元素
 - a.unshift (item)
 - a << item
@@ -1989,3 +2086,255 @@ b = a.collect{|i| i += 2}
 p b
 =>  [3, 4, 5, 6, 7] 
 ```
+
+# 散列类
+##  散列的创建
+### 使用 {}
+使用字面量直接创建散列
+```{ 键 => 值}```
+用符号作为键创建散列
+```{ 键: 值}```
+
+### 用 Hash.new
+
+```js
+h1 = Hash.new
+h2 = Hash.new("")
+p h1["not_key"]
+=> nil
+p h2["not_key"]
+=> ""
+```
+
+## 获取与设定
+### []
+### store 和 fetch
+用 store 方法设定值，用 fetch 方法获取值
+```js
+h = Hash.new
+h.store("R", "Ruby")
+p h.fetch("R")
+=> "Ruby"
+p h.fetch("N")
+=> 错误（IndexError）
+p h.fetch("N", "(undef)")
+=>  "(undef)"
+```
+如果对 fetch 方法指定第 2 个参数，那么该参数值就会作为键不存在时散列的默认值
+
+### keys / values / to_a
+- keys                  ```each_key```{| 键 | ......}
+- values                ```each_value```{| 值 | ......}
+- to_a                  ```each```{| 键 , 值 | ......}
+                        ```each```{| 数组 | ......}
+
+```js
+h = {"a"=>"b", "c"=>"d"}
+p h.keys
+=> ["a", "c"]
+p h.values
+=> ["b", "d"]
+p h.to_a
+=> [["a", "b"], ["c", "d"]]
+```
+
+##  查看指定对象是否为散列的键或值
+- h.key?(key)
+  h.has_key?(key)
+  h.include?(key)
+  h.member?(key)
+
+- h.value?(value)
+  h.has_value?(value)
+
+## 查看散列的大小
+- h.size
+  h.length
+
+- h.empty?
+  查看散列的大小是否为 0
+```js
+h = {"a"=>"b", "c"=>"d"}
+p h.empty?
+=> false
+h2 = Hash.new
+p h2.empty?
+=> true
+```
+
+## 删除键值
+- h.delete(key)
+  通过键删除用 delete 方法
+
+- h.delete_if{|key, val| … }
+  h.reject!{|key, val| … }
+  删除符合某种条件的键值
+
+## 初始化散列
+- h.clear
+
+# 正则表达式
+## 正则表达式的模式与匹配
+### =~ 方法
+```正则表达式 =~ 字符串```
+判断正则表达式与指定字符串是否匹配
+```js
+if 正则表达式 =~ 字符串
+  匹配时的处理
+else
+  不匹配时的处理
+end
+```
+还可以使用 ```!~``` 来颠倒“真”与“假”
+
+- ^             表示匹配行首
+- $             表示匹配行尾
+- []            选择多个字符中的 1 个
+- .             匹配任意字符,几个点代表几个字符
+- \s            表示空白符，匹配空格（0x20）、制表符（Tab）、换行符、换页符
+- \d            匹配 0 到 9 的数字
+- \w            匹配英文字母与数字
+- \A            匹配字符串的开头
+- \z            匹配字符串的末尾
+- \             对元字符进行转义
+- *             重复 0 次以上
+- +             重复 1 次以上
+- ?             重复 0 次或 1 次
+- *?            0 次以上的重复中最短的部分
+- +?            1 次以上的重复中最短的部分
+- ()            可以重复匹配多个字符
+- |             在几个候补模式中匹配任意一个
+- i             忽略英文字母大小写
+- x             忽略模式中的空白字符
+- m             匹配多行
+
+### quote 方法
+quote 方法会返回转义了元字符后的正则表达式字符串
+```js
+re1 = Regexp.new("abc*def")
+re2 = Regexp.new(Regexp.quote("abc*def"))
+p (re1 =~ "abc*def")
+=> nil
+p (re2 =~ "abc*def")
+=> 0
+```
+
+### 捕获
+```js
+/(.)(.)(.)/ =~ "abc"
+p $1
+=> "a"
+p $2
+=> "b"
+p $3
+=> "c"
+
+/(.)(\d\d)+(.)/ =~ "123456"
+p $1
+=> "1"
+p $2
+=> "45"
+p $3
+=> "6"
+```
+**(?: )**
+可以使用 (?: ) 过滤不需要捕获的模式
+```js
+/(.)(?:\d\d)+(.)/ =~ "123456"
+p $1
+=> "1"
+p $2
+=> "6"
+```
+### sub 方法与 gsub 方法
+用指定的字符置换字符串中的某部分字符
+sub 方法与 gsub 方法都有两个参数。第 1 个参数用于指定希望匹配的正则表达式的模式，第 2 个参数用于指定与匹配部分置换的字符,```sub 方法```只置换```首次匹配```的部分，而 ```gsub 方法```则会置换```所有匹配```的部分
+
+```js
+str = "abc     def   g    hi"
+
+p str.sub(/\s+/,',')
+=> "abc,def   g    hi"
+
+p str.gsub(/\s+/,',')
+=> "abc,def,g,hi"
+```
+
+### scan 方法
+scan 方法能像 gsub 方法那样获取匹配部分的字符，但不能做置换操作
+```js
+"abracatabra".scan(/.a/) do |matched|
+  p matched
+end
+
+> irb
+  "ra"
+  "ca"
+  "ta"
+  "ra"
+```
+
+# IO类
+IO 类的主要作用就是让程序与外部进行数据的输入（input）/ 输出（output）操作
+## 输入 / 输出的种类
+- 标准输
+  通过预定义常量 STDIN 可调用操作标准输入的 IO 对象
+  用全局变量 $stdin 也可以引用标准输入的 IO 对象
+- 标准输入
+  通过预定义常量 STDOUT 可调用操作标准输出的 IO 对象
+  用全局变量 $stdout 也可以引用标准输出的IO 对象
+- 标准输入
+  通过预定义常量 STDERR 可调用操作标准错误输出的 IO 对象
+  用全局变量 $stderr 也可以引用标准错误输出的 IO 对象
+
+### tty? 方法
+IO 对象是否与控制台关联，我们可以通过 tty? 方法判断
+
+tty.rb
+```js
+if $stdin.tty?
+  print "Stdin is a TTY.\n"
+else
+  print "Stdin is not a TTY.\n"
+end
+```
+普通调用
+```js
+> ruby tty.rb
+  Stdin is a TTY.
+```
+将命令的输出结果传给管道，或者通过文件输入内容时，程序的结果会不一样
+```js
+> echo | ruby tty.rb
+  Stdin is not a TTY.
+
+> ruby tty.rb < data.txt
+  Stdin is not a TTY.
+```
+
+## 文件输入 / 输出 
+- io= File.open(file, mode)
+  io = open(file, mode)
+  通过 File.open 方法或 open 方法打开文件并获取新的 IO 对象
+  - mode 模式
+    - r     只读
+    - r+    读写
+    - w     只写
+    - w+    读写
+    - a     用追加模式打开文件,文件不存在则创建新的文件
+    - r     用读取/ 追加模式打开文件,文件不存在则创建新的文件
+
+- io.close
+  关闭已打开的文件
+- io.close?
+  检查 IO 对象是否关闭了
+- File.read(file)
+  一次性读取文件 file 的内容
+
+## 基本的输入 / 输出操作
+### 输入操作
+- io.gets(rs)
+  io.each(rs)
+  io.each_line(rs)
+  io.readlines(rs)
+  从 IO 类的对象 io 中读取一行数据
