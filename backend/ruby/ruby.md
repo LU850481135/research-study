@@ -2261,7 +2261,8 @@ p str.gsub(/\s+/,',')
 ```
 
 ### scan 方法
-scan 方法能像 gsub 方法那样获取匹配部分的字符，但不能做置换操作
+scan 方法能像 gsub 方法那样获取匹配全部的字符，但不能做置换操作
+如果正则表达是中带有()，则只记录()的匹配内容.返回结果为数组
 ```js
 "abracatabra".scan(/.a/) do |matched|
   p matched

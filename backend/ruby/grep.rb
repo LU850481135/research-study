@@ -4,9 +4,9 @@ def simple_grep(pattern, filename)
   hour = []
   file = File.open(filename)
   file.each_line do |line|
-    line.scan(pattern) do |matched|
-      day << matched[0]
-      hour << matched.join(":")
+    line.match(pattern) do |matched|
+      day << matched[1]
+      hour << matched[0]
     end
   end
   hourTraffic = statisticalCount(hour)
