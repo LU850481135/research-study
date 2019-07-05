@@ -1,8 +1,16 @@
 # Haml
+[官网](http://haml.info/docs/yardoc/file.REFERENCE.html#using_haml)
+
 它是一个命令行工具。需要先安装Ruby语言，再安装Haml
 ```gem install haml```
-将haml文件一次性转为html文件
+
+Haml可以通过三种方式使用:
+- 从命令行运行Haml,将haml文件一次性转为html文件
 ```haml input.haml output.html```
+- 作为Ruby on Rails的插件
+  在Gemfile文件中添加
+  ```gem "haml"```
+- 作为独立的Ruby模块
 
 **haml的简化规则如下**
 1. !!! 5 代表 <!DOCTYPE html>
