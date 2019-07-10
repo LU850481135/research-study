@@ -12,6 +12,16 @@ ssh-add ~/.ssh/id_rsa
 ## 杀死进程
 ```sudo kill 2683```
 
+## SSH(远程连接工具)
+1. SSH是安全的加密协议，用于远程连接Linux服务器                
+2. SSH的默认端口是22，安全协议版本是SSH2                
+3. SSH服务器端主要包含2个服务功能SSH连接和SFTP服务器                
+4. SSH客户端包含ssh连接命令和远程拷贝scp命令等
+```ssh root@192.168.25.137```
+## scp
+**用于在Linux下进行远程拷贝文件的命令**
+```scp user@192.168.244.210:/home/user/uro/* ~/```
+
 ## 开启微信开发者工具
 ```
 ~/Downloads/wechat_web_devtools
@@ -105,3 +115,92 @@ git config user.email
 cd ~/.ssh/
 sudo gedit config
 ```
+### 关闭运行中的容器
+docker stop 容器ID
+### 启动一个已经停止的容器
+docker start 容器ID
+### 重启一个容器
+docker restart 容器ID
+
+### 显示当前运行的容器
+docker ps
+### 显示全部容器
+docker ps -a
+
+### 查看本地镜像
+docker images
+
+### 删除容器
+docker rm 容器ID
+
+### 删除所有容器
+docker rm $(docker ps -a)
+### 查看历史
+docker history 镜像ID
+
+docker start 50a0004b6d6c
+docker start 981e843cdbc6
+
+docker run --name postgres1 -e POSTGRES_PASSWORD=password -p 54321:5432 -d postgres:10
+172.17.0.1 postgres  password 54321
+
+docker inspect postgres:9.4 
+ **进入数据库**
+docker exec -it 981e843cdbc6 /bin/bash
+
+docker pull chorss/docker-pgadmin4
+docker run -p 5050:5050  -e "PGADMIN_DEFAULT_EMAIL=test@boluome.com"  -e "PGADMIN_DEFAULT_PASSWORD=test"  -d chorss/docker-pgadmin4
+
+cd /etc/nginx/
+sudo cp sites-available/default sites-available/uro
+sudo ln -s /etc/nginx/sites-available/uro sites-enabled/uro
+
+sudo systemctl restart nginx
+
+命令行导入dump
+psql -h 172.17.0.1 -p 54321  -U postgres pcfollow_development < pcf_pro.ustest.20190119
+
+### 安装PostgreSQL客户端
+sudo apt-get install postgresql-client
+
+### 安装PostgreSQL服务器
+sudo apt-get install postgresql
+
+### 模糊匹配
+ctrl+r 
+
+### history
+history 查看历史
+history|grep a 查看历史
+
+### 环境初始化
+```js
+rails db:setup
+bin/rails db:migrate 
+RAILS_ENV=development
+```
+### Redis 服务端配置——Could not connect to Redis at 127.0.0.1:6379: Connection refused
+```js
+redis-cli
+sudo apt install redis-tools
+
+redis-server /etc/redis.conf
+sudo apt install redis-server
+
+redis-cli
+// 127.0.0.1:6379> 
+// successfully
+```
+
+**rvm**
+```js
+source /usr/share/rvm/scripts/rvm
+// 切换ruby版本
+rvm install 2.5.2
+
+bundle install
+
+bin/rails server
+```
+
+bin/webpack-dev-server
