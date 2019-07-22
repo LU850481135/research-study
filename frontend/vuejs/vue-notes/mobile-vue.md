@@ -46,3 +46,6 @@
 ## 1px像素问题
 
 ```https://juejin.im/post/5c790669e51d453eec65a952#heading-3```
+
+npm install stylus --save
+npm install stylus-loader --save
