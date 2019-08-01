@@ -21,6 +21,10 @@ ssh-add ~/.ssh/id_rsa
 ```tcp 0.0.0.0：80的tcp号为2683```
 ## 杀死进程
 ```sudo kill 2683```
+强制终止
+```sudo kill -9 2683```
+
+```rm 文件路径```
 
 ## SSH(远程连接工具)
 1. SSH是安全的加密协议，用于远程连接Linux服务器                
@@ -186,8 +190,7 @@ history|grep a 查看历史
 ### 环境初始化
 ```js
 rails db:setup
-bin/rails db:migrate 
-RAILS_ENV=development
+bin/rails db:migrate RAILS_ENV=development
 ```
 ### Redis 服务端配置——Could not connect to Redis at 127.0.0.1:6379: Connection refused
 ```js
@@ -214,3 +217,5 @@ bin/rails server
 ```
 
 bin/webpack-dev-server
+
+ctrl+shift+v vscode预览md

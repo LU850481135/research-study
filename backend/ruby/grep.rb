@@ -24,4 +24,4 @@ def statisticalCount(ary)
   return h
 end
 
-simple_grep(/\[(.*?)\:(.*?)\:/, 'access.log')
+simple_grep(/\[(.*?)\:(..)/, 'access.log')

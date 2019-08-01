@@ -49,3 +49,27 @@
 
 npm install stylus --save
 npm install stylus-loader --save
+## keep-alive
+```js
+<keep-alive  exclude="uRankQuestionCategories">
+  <router-view v-wechat-title="$route.meta.title" v-if="!$route.meta.keepAlive" />
+</keep-alive>
+{
+  path: '/urank/:type/question_categories/:category_id',
+  name: 'uRankQuestionCategories',
+  component: uRankQuestionCategories,
+  meta: {
+    title: '问卷调查',
+    keepAlive: false
+  }
+}
+```
+
+**单页面跳转解决路由不刷新问题**
+```js
+computed: {
+  time () {
+    return this.$route.name != undefined ? this.$route.name+new Date().getTime() : new Date().getTime()
+  }
+}
+```
