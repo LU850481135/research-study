@@ -5,7 +5,7 @@
 ### 方案一：使用同一个邮箱
 
 ```js
-git config --global user.name 'liulu' && git config --global user.email '850481135@qq.com'
+git config --global user.name 'cassieliu' && git config --global user.email 'cassieliu@augmentum.com.cn'
 
 ```
 

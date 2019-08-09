@@ -1,19 +1,22 @@
-# frontend
-前端学习笔记
-
-# backend
-后端学习笔记
-
-# h5
-移动端学习笔记
-
 # 零散笔记
 ```js
 eval $(ssh-agent -s)
 ssh-add ~/.ssh/id_rsa
 ```
+
+# Linux 常用命令行
+## deb 安装格式
+```sudo dpkg -i(install) <package.deb>```
+
+```sudo apt-get install 软件包```
+```sudo apt-get update```
+```sudo apt-get remove  软件包```
+```apt list postgresql*```
+
 ## 查看进程
 ```sudo netstat -tanlp```
+
+## ps aux | grep 3000 查看端口是3000的进程
 
 ## 查看端口是否被占用
 ```netstat -nap | grep 80```
@@ -27,14 +30,28 @@ ssh-add ~/.ssh/id_rsa
 ```rm 文件路径```
 
 ## SSH(远程连接工具)
-1. SSH是安全的加密协议，用于远程连接Linux服务器                
-2. SSH的默认端口是22，安全协议版本是SSH2                
-3. SSH服务器端主要包含2个服务功能SSH连接和SFTP服务器                
+1. SSH是安全的加密协议，用于远程连接Linux服务器
+2. SSH的默认端口是22，安全协议版本是SSH2
+3. SSH服务器端主要包含2个服务功能SSH连接和SFTP服务器
 4. SSH客户端包含ssh连接命令和远程拷贝scp命令等
 ```ssh root@192.168.25.137```
 ## scp
 **用于在Linux下进行远程拷贝文件的命令**
-```scp user@192.168.244.210:/home/user/uro/* ~/```
+```scp user@192.168.xxx.xxx:/home/user/uro/* ~/```
+
+**从服务器复制文件到本地**
+```scp root@192.168.1.100:/data/test.txt /home/myfile/```
+**从服务器复制文件夹到本地**
+```scp -r root@192.168.1.100:/data/ /home/myfile/```
+**复制文件(从本地复制文件到服务器)**
+```scp /home/yt00796/uro/inv.server/engines/uaa/* user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
+**复制整个文件夹(从本地复制文件夹到服务器)**
+```scp -r /home/yt00796/uro/inv.server/engines/uaa/ user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
+
+1. 删除文件夹
+```rm -rf  fileNamede```
+2. 删除文件
+```rm -f  fileNamede```
 
 ## 开启微信开发者工具
 ```
@@ -162,8 +179,12 @@ docker inspect postgres:9.4
  **进入数据库**
 docker exec -it 981e843cdbc6 /bin/bash
 
+sudo docker exec -it a437761a7a26 psql -U postgres
+
 docker pull chorss/docker-pgadmin4
 docker run -p 5050:5050  -e "PGADMIN_DEFAULT_EMAIL=test@boluome.com"  -e "PGADMIN_DEFAULT_PASSWORD=test"  -d chorss/docker-pgadmin4
+
+docker run -p 5050:5050  -e "PGADMIN_DEFAULT_EMAIL=root@boluome.com"  -e "PGADMIN_DEFAULT_PASSWORD=root"  -d dpage/pgadmin4
 
 cd /etc/nginx/
 sudo cp sites-available/default sites-available/uro
@@ -174,11 +195,22 @@ sudo systemctl restart nginx
 命令行导入dump
 psql -h 172.17.0.1 -p 54321  -U postgres pcfollow_development < pcf_pro.ustest.20190119
 
+psql -U postgres -p 5432 
+
+postgres
+
 ### 安装PostgreSQL客户端
 sudo apt-get install postgresql-client
 
 ### 安装PostgreSQL服务器
 sudo apt-get install postgresql
+
+# Ubuntu 16.04卸载PostgresQL
+```
+ps -aux |grep postgresql ##查看postgresql进程是否仍在运行
+sudo service postgresql stop ##暂停服务
+sudo apt-get --purge remove postgresql ##卸载及删除安装包
+```
 
 ### 模糊匹配
 ctrl+r 
@@ -219,3 +251,173 @@ bin/rails server
 bin/webpack-dev-server
 
 ctrl+shift+v vscode预览md
+
+```lsb_release -a```
+
+yum list 
+convert --version
+yum remove ImageMagick*
+yum list ImageMagick*
+
+Centos彻底删除已安装软件
+1. 查询是否安装了软件
+```rpm -qa | grep -i 软件名```
+
+2. 删除已安装的软件包
+```sudo rpm -e  -- 包名 # 普通删除模式```
+```sudo rpm -e --nodeps 包名 #强力删除模式，如果用上面命令删除时，提示有依赖的其他文件，则用该命令可以对其进行强力删除```
+
+C_INCLUDE_PATH=/usr/include/ImageMagick-6 PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ gem install rmagick -v '4.0.0'
+
+
+
+# CentOS 6.9上搭建Ruby on Rails 环境
+## 安装rvm
+```curl -L get.rvm.io | bash -s stable```
+
+**抛错(需要导入public key)**
+```
+gpg: Can't check signature: No public key
+GPG signature verification failed for '/home/user/.rvm/archives/rvm-1.29.9.tgz' - 'https://github.com/rvm/rvm/releases/download/1.29.9/1.29.9.tar.gz.asc'! Try to install GPG v2 and then fetch the public key:
+gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+```
+
+**导入public key**
+
+```gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB```
+
+**导入成功后,重新安装rvm**
+```curl -L get.rvm.io | bash -s stable```
+```source /home/user/.rvm/scripts/rvm```
+
+## 安装ruby
+
+**查看rvm库中已知的ruby版本**
+```rvm list known```
+
+**安装一个ruby版本**
+```rvm install 2.5.2```
+**抛错**
+```user password required for 'yum install -y autoconf automake bison libffi-devel libtool readline-devel ruby sqlite-devel':```
+
+**解决方案**
+```yum install -y autoconf automake bison libffi-devel libtool readline-devel ruby sqlite-devel```
+
+**设置默认的Ruby版本**
+```rvm use ruby-2.5.2 --default```
+
+## 安装rails
+```rvm gemset create rails5```
+```rvm use ruby-2.5.2@rails5```
+
+# 下载node
+
+```wget https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-x64.tar.xz ```
+```xz -d node-v10.16.0-linux-x64.tar.xz```
+```tar -xf node-v10.16.0-linux-x64.tar```
+```ln -s /home/user/node-v10.16.0-linux-x64/bin/node /usr/bin/node```
+```ln -s /home/user/node-v10.16.0-linux-x64/bin/npm /usr/bin/npm```
+
+# 安装postgres
+```docker pull postgres:10.0```
+```docker run --name postgres -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres:10```
+
+1. 安装存储库RPM
+```yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-6-i386/pgdg-redhat-repo-latest.noarch.rpm```
+2. 安装客户端软件包
+```yum install postgresql10```
+3. 安装服务器包
+```yum install postgresql10-server```
+4. 初始化数据库并启用自动启动
+```service postgresql-10 initdb```
+```chkconfig postgresql-10 on```
+```service postgresql-10 start```
+
+## bundle install出错
+
+1. ```gem install gem```出错
+**报错信息**
+```
+checking for pg_config... no
+No pg_config... trying anyway. If building fails, please try again with
+ --with-pg-config=/path/to/pg_config
+checking for libpq-fe.h... no
+Can't find the 'libpq-fe.h header
+```
+**解决方案**
+```gem install pg --with-pg-config=/usr/pgsql-10/bin/pg_config```
+
+2. ```gem install sassc```出错
+**报错信息**
+```
+Building native extensions. This could take a while...
+ERROR:  Error installing sassc:
+	ERROR: Failed to build gem native extension.
+
+    current directory: /home/user/.rvm/gems/ruby-2.5.1@rails5/gems/sassc-1.12.1/ext
+/home/user/.rvm/rubies/ruby-2.5.1/bin/ruby -rrubygems /home/user/.rvm/gems/ruby-2.5.1@rails5/gems/rake-12.3.2/exe/rake RUBYARCHDIR\=/home/user/.rvm/gems/ruby-2.5.1@rails5/extensions/x86_64-linux/2.5.0/sassc-1.12.1 RUBYLIBDIR\=/home/user/.rvm/gems/ruby-2.5.1@rails5/extensions/x86_64-linux/2.5.0/sassc-1.12.1
+cd libsass
+make lib/libsass.so
+mkdir lib
+```
+**解决方案(升级GCC的版本)**
+1. 查看GCC版本
+```
+# gcc --version | head -n1
+gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-23)
+```
+2. 安装新版本
+```
+yum install centos-release-scl-rh
+yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-binutils
+```
+
+3. 配置GCC环境并检查版本
+```
+# cat << _EOF_ > /etc/profile.d/devtoolset.sh
+> #!/bin/bash
+> source scl_source enable devtoolset-7
+> _EOF_
+
+# gcc --version | head -n1
+gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-23)
+
+# cat /etc/profile.d/devtoolset.sh
+# source /etc/profile.d/devtoolset.sh
+# gcc --version | head -n1
+
+gcc (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)
+```
+4. 确认GCC配置好以后，再次执行bundle或者执行gem install sassc来安装
+
+# 启动项目
+```./bin/rails s```
+
+**报错信息**
+```
+========================================
+  Your Yarn packages are out of date!
+  Please run `yarn install` to update.
+========================================
+
+
+To disable this check, please add `config.webpacker.check_yarn_integrity = false`
+to your Rails development config file (config/environments/development.rb).
+
+
+Error: Could not find or load main class check
+```
+1. 安装yarn
+```
+curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+sudo yum install yarn
+```
+
+2. ```yarn install```
+
+
+# 安装rvm
+```https://rvm.io/```
+
+# postgresql
+```https://www.postgresql.org/download/linux/ubuntu/```
