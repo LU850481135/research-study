@@ -5,6 +5,50 @@ ssh-add ~/.ssh/id_rsa
 ```
 
 # Linux 常用命令行
+## 基本安装以及卸载
+### apt-get(apt)的基本使用
+```
+安装软件 apt-get install xxx
+ 
+卸载软件 apt-get remove xxx
+ 
+卸载并清除配置 apt-get remove --purge xxx
+ 
+更新软件信息数据库 apt-get update
+ 
+进行系统升级 apt-get upgrade
+ 
+搜索软件包 apt-cache search xxx
+ 
+修正（依赖关系）安装：apt-get -f install
+
+```
+### dpkg的基本使用
+```
+安装deb软件包 dpkg -i xxx.deb
+ 
+删除软件包 dpkg -r xxx.deb
+ 
+连同配置文件一起删除 dpkg -r --purge xxx.deb
+ 
+查看软件包信息 dpkg -info xxx.deb
+ 
+查看文件拷贝详情 dpkg -L xxx.deb
+ 
+查看系统中已安装软件包信息 dpkg -l
+ 
+重新配置软件包 dpkg-reconfigure xx
+ 
+sudo dpkg -p package_name卸载软件包及其配置文件，但无法解决依赖关系！
+ 
+sudo aptitude purge pkgname卸载软件包及其配置文件与依赖关系包！ 
+ 
+清除所有已删除包的残馀配置文件
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+ 
+如果报如下错误，证明你的系统中没有残留配置文件了，无须担心。
+```
+
 ## deb 安装格式
 ```sudo dpkg -i(install) <package.deb>```
 
@@ -47,6 +91,8 @@ ssh-add ~/.ssh/id_rsa
 ```scp /home/yt00796/uro/inv.server/engines/uaa/* user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
 **复制整个文件夹(从本地复制文件夹到服务器)**
 ```scp -r /home/yt00796/uro/inv.server/engines/uaa/ user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
+
+ scp -r /home/yt00796/uro/inv.server/engines/uaa/ uro@192.168.244.61:/home/uro/workspace/inv.server/engines
 
 1. 删除文件夹
 ```rm -rf  fileNamede```
@@ -190,7 +236,7 @@ cd /etc/nginx/
 sudo cp sites-available/default sites-available/uro
 sudo ln -s /etc/nginx/sites-available/uro sites-enabled/uro
 
-sudo systemctl restart nginx
+  sudo systemctl restart nginx
 
 命令行导入dump
 psql -h 172.17.0.1 -p 54321  -U postgres pcfollow_development < pcf_pro.ustest.20190119
@@ -415,9 +461,126 @@ sudo yum install yarn
 
 2. ```yarn install```
 
+# Ubuntu18.04.3上搭建Ruby on Rails 环境
+## 安装rvm
+- 安装 GPG keys
+```gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB```
+- 安装rvm
+```\curl -sSL https://get.rvm.io | bash -s stable --rails```
+```source /home/uro/.rvm/scripts/rvm```
 
-# 安装rvm
-```https://rvm.io/```
+## 用rvm安装ruby
 
-# postgresql
+1. 查看rvm库中已知的ruby版本
+```rvm list known```
+
+2. 安装一个ruby版本
+```rvm install 2.5.2```
+
+3. 设置ruby版本
+```rvm use ruby-2.5.2 --default```
+
+## 安装rails
+```rvm gemset create rails5```
+```rvm use ruby-2.5.2@rails5```
+
+## 下载node
+
+```wget https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-x64.tar.xz```
+```xz -d node-v10.16.0-linux-x64.tar.xz```
+```tar -xf node-v10.16.0-linux-x64.tar```
+```ln -s /home/uro/Downloads/node-v10.16.0-linux-x64/bin/node /usr/bin/node```
+```ln -s /home/uro/Downloads/node-v10.16.0-linux-x64/bin/npm /usr/bin/npm```
+
+## postgresql
 ```https://www.postgresql.org/download/linux/ubuntu/```
+- 更新软件包
+```sudo apt update```
+- 查看postgresql软件包版本
+```apt list postgresql*```
+- 安装postgresql10
+```sudo apt-get install postgresql-10```
+- 配置postgresql.conf
+```
+vi /etc/postgresql/10/main/postgresql.conf
+将 #listen_addresses = 'localhost' 的注释去掉并改为 listen_addresses = '*' 
+```
+- 配置pg_hba.conf
+```
+vi /etc/postgresql/10/main/pg_hba.conf
+# IPv4 local connections:
+host    all             all             192.168.244.61/32       trust
+```
+- 重启数据库
+```/etc/init.d/postgresql restart```
+- 连接数据库
+```psql -U postgres -p 5432  -h 192.168.244.xxx```
+
+## bundle install
+
+1. ```gem install pg```出错
+
+**报错信息**
+```
+You need to install postgresql-server-dev-X.Y for building a server-side extension or libpq-dev for building a client-side application.
+You need to install postgresql-server-dev-X.Y for building a server-side extension or libpq-dev for building a client-side application.
+checking for libpq-fe.h... no
+Can't find the 'libpq-fe.h header
+```
+**解决方案**
+```sudo apt-get install postgresql-server-dev-10```
+ /usr/bin/pg_config
+
+2. ```gem install rmagick```
+
+**报错信息**
+```ERROR: Can't install RMagick 4.0.0. Can't find ImageMagick with pkg-config```
+
+**解决方案**
+```sudo apt-get install imagemagick libmagickcore-dev libmagickwand-dev```
+
+## 启动项目
+```./bin/rails s```
+
+**报错信息**
+```
+========================================
+  Your Yarn packages are out of date!
+  Please run `yarn install` to update.
+========================================
+
+
+To disable this check, please add `config.webpacker.check_yarn_integrity = false`
+to your Rails development config file (config/environments/development.rb).
+
+
+sh: 1: yarn: not found
+```
+1. 安装yarn
+```
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+```
+
+2. ```yarn install```
+
+## 初始化环境
+```
+rails db:setup
+bin/rails db:migrate RAILS_ENV=development
+```
+## 导入数据
+
+## Redis 服务端配置——Could not connect to Redis at 127.0.0.1:6379: Connection refused
+```js
+redis-cli
+sudo apt install redis-tools
+
+redis-server /etc/redis.conf
+sudo apt install redis-server
+
+redis-cli
+// 127.0.0.1:6379> 
+// successfully
+```
