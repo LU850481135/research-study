@@ -28,3 +28,16 @@ edunpm - http://registry.enpmjs.org/
 - 测试速度
 ```nrm test 别名```
 
+## 安装React Devtools调试工具
+
+安装React Devtools调试工具的步骤：
+1. 去git上下载react-devtools文件到本地，https://github.com/facebook/react-devtools
+2. 用npm安装依赖
+```
+cd ~/Downloads/react-devtools-3
+npm install
+```
+3. 安装依赖成功后，打包一份扩展程序
+```npm run build:extension:chrome```
+**打包完成之后，```~/Downloads/react-devtools-3/shells/chrome```文件夹中多了一个```build/```文件夹**
+4. 打开chrome扩展程序chrome://extensions/,加载已解压的扩展程序，选择第3步中的生成的```build/unpacked```文件夹

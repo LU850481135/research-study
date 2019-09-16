@@ -78,7 +78,7 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 2. SSH的默认端口是22，安全协议版本是SSH2
 3. SSH服务器端主要包含2个服务功能SSH连接和SFTP服务器
 4. SSH客户端包含ssh连接命令和远程拷贝scp命令等
-```ssh root@192.168.25.137```
+```ssh root@IP地址```
 ## scp
 **用于在Linux下进行远程拷贝文件的命令**
 ```scp user@192.168.xxx.xxx:/home/user/uro/* ~/```
@@ -91,8 +91,6 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 ```scp /home/yt00796/uro/inv.server/engines/uaa/* user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
 **复制整个文件夹(从本地复制文件夹到服务器)**
 ```scp -r /home/yt00796/uro/inv.server/engines/uaa/ user@192.168.xxx.xxx:/home/user/workspace/pcfollow.server/engines/uaa/```
-
- scp -r /home/yt00796/uro/inv.server/engines/uaa/ uro@192.168.244.61:/home/uro/workspace/inv.server/engines
 
 1. 删除文件夹
 ```rm -rf  fileNamede```
@@ -584,3 +582,16 @@ redis-cli
 // 127.0.0.1:6379> 
 // successfully
 ```
+
+## GIT Submodule的使用
+当一个项目需要包含其他支持项目源码时使用的功能，作用是两个项目是独立的，且主项目可以使用另一个支持项目
+```git submodule add <submodule_url>  # 添加子项目```
+```
+git submodule init  # 初始化本地.gitmodules文件
+git submodule update  # 同步远端submodule源码
+```
+```git clone --recurse-submodules <main_project_url>  # 获取主项目和所有子项目源码```
+
+docker start 981e843cdbc6 50a0004b6d6c
+source /usr/share/rvm/scripts/rvm
+rvm use ruby-2.5.2@rails5

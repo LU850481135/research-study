@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 
 function App(props) {
   const numbers = props.numbers;
@@ -38,9 +39,9 @@ function Welcome(props) {
 
 function Login(props) {
   return (
-    <button onClick={props.onClick}>
+    <Button onClick={props.onClick}>
       Login
-    </button>
+    </Button>
   );
 }
 
