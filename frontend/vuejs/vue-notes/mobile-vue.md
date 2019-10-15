@@ -73,3 +73,31 @@ computed: {
   }
 }
 ```
+
+**在css引入css文件**
+```@import '../../assets/styles/common.scss';```
+等效于
+```@import '~@/assets/styles/common.scss';```
+
+**在js中引入css文件**
+```import '../../assets/styles/common.scss';```
+等效于
+```import '@/assets/styles/common.scss';```
+
+还可以在```webpack.base.conf.js```进行配置
+```'styles': resolve('src/assets/styles')```
+```
+resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+      'styles': resolve('src/assets/styles')
+    }
+  },
+```
+使用
+1. 在css中引入文件
+```@import '~styles/common.scss'```
+2. 在js中引入文件
+```@import 'styles/common.scss```
