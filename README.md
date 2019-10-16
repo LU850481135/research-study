@@ -594,4 +594,6 @@ git submodule update  # 同步远端submodule源码
 
 docker start 981e843cdbc6 50a0004b6d6c
 source /usr/share/rvm/scripts/rvm
-rvm use ruby-2.5.2@rails5
+rvm use ruby-2.5.5@rails5
+
+关键字 site:()
