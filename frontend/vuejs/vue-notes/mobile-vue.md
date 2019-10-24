@@ -66,6 +66,7 @@ npm install stylus-loader --save
 ```
 
 **单页面跳转解决路由不刷新问题**
+<router-view class="home-content" :key="time"></router-view>
 ```js
 computed: {
   time () {

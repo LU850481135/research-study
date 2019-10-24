@@ -597,3 +597,18 @@ source /usr/share/rvm/scripts/rvm
 rvm use ruby-2.5.5@rails5
 
 关键字 site:()
+
+vim ~/.bashrc
+
+alias sshl='eval `ssh-agent -s` && ssh-add'
+alias rvml='source /usr/share/rvm/scripts/rvm'
+
+source ~/.bashrc
+
+sshl
+
+rvml
+
+ps aux | grep 3000
+
+nohup
