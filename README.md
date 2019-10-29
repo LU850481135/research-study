@@ -96,6 +96,17 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 ```rm -rf  fileNamede```
 2. 删除文件
 ```rm -f  fileNamede```
+3. 创建文件夹
+```mkdir dir1```
+4.  重命名/移动 一个目录
+```mv dir1 new_dir```
+4. 复制
+```cp file1 file2```
+
+**查看日志**
+```tail -n 100 文件``` 
+**让某个程序在后台运行**
+```nohup npm start &```
 
 ## 开启微信开发者工具
 ```
@@ -610,5 +621,9 @@ sshl
 rvml
 
 ps aux | grep 3000
+netstat -nap | grep 3000
+查看日志```tail -n 100 文件``` 
+让某个程序在后台运行```nohup npm start &```
 
-nohup
+- Hospital.research_groups.each do |f|
+  = f.inspect
