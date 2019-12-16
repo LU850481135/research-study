@@ -309,3 +309,32 @@ function App() {
 - consumer 嵌套复杂，consumer的第一个子节点必须是一个函数
 - contextType 只支持类组件的写法，且只能使用一次（不支持多个context）
 - useContext 不需要嵌套，写法简单
+
+
+ref
+## Refs 提供了一种方式，允许我们访问 DOM 节点或在 render 方法中创建的 React 元素
+useRef()
+
+React.createRef()
+React.forwardRef()
+
+https://juejin.im/post/5c7fab006fb9a049cb1984d1
+
+```javascript
+const FancyButton = React.forwardRef((props, ref) => (
+  <button ref={ref} className="FancyButton">
+    {props.children}
+  </button>
+));
+
+const ref = React.createRef();
+<FancyButton ref={ref}>Click me!</FancyButton>;
+```
+
+1. 通过调用 React.createRef() 创建了一个 React ref 并将其赋值给 ref 变量
+2. 通过指定 ref 为 JSX 属性，将其向下传递给 <FancyButton ref={ref}>
+3. React 传递 ref 给 forwardRef 内函数 (props, ref) => ...，作为其第二个参数
+4. 向下转发该 ref 参数到 <button ref={ref}>，将其指定为 JSX 属性
+5. 当 ref 挂载完成，ref.current 将指向 <button> DOM 节点
+
+**React.forwardRef((props, ref) => (...)) ref参数只在使用 React.forwardRef 定义组件时存在**

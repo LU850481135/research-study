@@ -627,3 +627,8 @@ netstat -nap | grep 3000
 
 - Hospital.research_groups.each do |f|
   = f.inspect
+
+  docker run --name bird_server -v /home/uro/data/pgdata/pca/bird_server/:/var/lib/postgresql/data/ -e POSTGRES_PASSWORD=postgres -p 25432:5432 -d postgres:10
+
+  docker exec bird_server sh -c 'exec psql -U postgres -d bird_development < '
+psql -h 172.17.0.1 -p 25432  -U postgres bird_development < bird_20190819_1402.sql
