@@ -1,0 +1,237 @@
+// color
+$white: #fff;
+$black: #333;
+$light-gray: #d7d7d7;
+$orange: #ffa32c;
+$dark-orange: #ec6941;
+$link-blue: #169bd5;
+$red: #f5222d;
+$light-black: #aaa;
+$mid-gray: #888;
+$border-gray: #8d8d8d;
+$label-blue: #00a0e9;
+$light-blue: #66c6f2;
+$bg-grey: #f9fafd;
+$light-grey: #d9d9d9;
+$border-light-grey: #dddddd;
+$layout-bg-color: #f0f2f5;
+$bg-blue: #3c8dbc;
+$border-bottom-light-grey: #ebebeb;
+$font-light-gray: #bebbbb;
+$basic-blue: #1890ff;
+$completed : #6fe680;
+$unfinished : #f4b614;
+$not-begin : #cdcbcb;
+
+// font-size
+$is-12: 12px;
+$is-13: 13px;
+$is-14: 14px;
+$is-16: 16px;
+$is-18: 18px;
+$is-20: 20px;
+$is-34: 34px;
+$is-30: 30px;
+$is-36: 36px;
+
+// font-weight
+$bold: bold;
+
+html body {
+  color: $black;
+}
+
+// border
+@mixin slim-border($location) {
+  border-#{$location}: 1px solid $light-gray;
+}
+
+// box-shadow
+@mixin box-shadow($x, $y, $width, $color) {
+  -moz-box-shadow: $x $y $width $color;
+  -webkit-box-shadow: $x $y $width $color;
+  box-shadow: $x $y $width $color;
+}
+
+@mixin required-label {
+  label {
+    &:before {
+      content: '*';
+      display: inline-block;
+      margin-right: 4px;
+      color: $red;
+      font-size: 14px;
+      line-height: 1;
+      font-family: SimSun, sans-serif;
+    }
+  }
+}
+
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+@mixin fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0
+}
+
+@mixin line-height($height) {
+  height: $height;
+  line-height: $height;
+}
+
+@mixin bg-image($image, $width, $height) {
+  background-image: url($image);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: $width;
+  height: $height;
+}
+
+@mixin ellipsis($rowCount: 1) {
+  @if $rowCount <=1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $rowCount;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@mixin common-form($labelW, $inputW) {
+  .common-form {
+    .ant-form-item-label {
+      > label {
+       &:after {
+         content: '';
+       }
+      }
+    }
+    .ant-form-item {
+      width: 100%;
+      .ant-col.ant-form-item-label {
+        width: $labelW;
+      }
+      .ant-form-item-control-wrapper {
+        width: 100% - $labelW;
+        .ant-form-item-children {
+          display: block;
+          .ant-calendar-picker,
+          .ant-select,
+          .ant-input-number,
+          > input {
+            width: $inputW;
+            border-radius: 0;
+          }
+          > textarea {
+            border-radius: 0;
+            margin-top: 4px;
+            min-height: 100px;
+          }
+          .ant-input-number-handler-wrap {
+            display: none;
+          }
+        }
+        .has-feedback {
+          display: block;
+          .ant-input {
+            padding-right: 11px;
+          }
+          .ant-calendar-picker-icon,
+          .ant-select-arrow {
+            right: 11px;
+          }
+          .ant-select-selection__rendered {
+            margin-right: 11px;
+          }
+        }
+      }
+
+      &.ant-form-item-with-help {
+        margin-bottom: 0;
+      }
+
+      &.empty-item {
+        visibility: hidden;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .ant-row {
+      .expand-btn {
+        cursor: pointer;
+        display: inline-block;
+        width: 100px;
+        line-height: 35px;
+        border: solid 1px $light-grey;
+        border-radius: 4px;
+        i {
+          margin-left: 5px;
+        }
+      }
+      &.expand {
+        margin-top: 20px;
+        text-align: center;
+      }
+      &.unexpand {
+        margin-bottom: 20px;
+      }
+
+      &.row-show {
+        display: block;
+      }
+      &.row-hide {
+        display: none;
+      }
+    }
+  }
+  .ant-modal-footer {
+    button {
+      @include size(89px, 39px);
+    }
+    button + button {
+      margin-left: 25px;
+
+      span {
+        color: $white;
+      }
+    }
+  }
+}
+
+@mixin onePixelBorder {
+  position: relative;
+  display: inline-block;
+  font-size: .533333rem;
+  color: $light-gray;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $light-gray;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+  }
+}
