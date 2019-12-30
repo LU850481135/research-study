@@ -49,3 +49,7 @@ $ ssh -T git@github.com
 # 测试gitlab
 $ ssh -T git@gitlab.com
 ```
+
+## git pull 与 git fetch的区别
+**git fetch 相当于是从远程获取最新到本地，不会自动merge**
+**git pull 相当于是从远程获取最新版本并merge到本地**
