@@ -5,7 +5,7 @@
 ### 方案一：使用同一个邮箱
 
 ```js
-git config --global user.name 'cassieliu' && git config --global user.email 'cassieliu@augmentum.com.cn'
+git config --global user.name 'XXX' && git config --global user.email 'xxx@qq.com'
 
 ```
 
@@ -45,7 +45,7 @@ Host github.com
 ```
 # 测试github
 $ ssh -T git@github.com
-// Hi LU850481135! You've successfully authenticated, but GitHub does not provide shell access.
+// Hi test! You've successfully authenticated, but GitHub does not provide shell access.
 # 测试gitlab
 $ ssh -T git@gitlab.com
 ```
