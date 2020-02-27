@@ -5,24 +5,25 @@ import UserApi from '@/api/users'
 
 const LoginForm = Form.create({ name: 'login' })(
   function LoginForm (props) {
-    const { intl, form } = props
+    const { intl, form, history } = props
     const { getFieldDecorator, validateFields } = form
 
     const handleSubmit = (e) => {
       e.preventDefault()
       validateFields((err, values) => {
         if (!err) {
-          UserApi.login(values.username, values.password).then(async ({ data }) => {
-            if (data.jwt) {
-              Storage.setItem('token', data.jwt)
-              await UserApi.userInfo().then(({data}) => {
-                console.log('userInfo', data)
-                Storage.setItem('currentUser', JSON.stringify(data))
-              })
-            }
-          }).catch((error) => {
-            message.error(error.message)
-          })
+          history.push('/home')
+          // UserApi.login(values.username, values.password).then(async ({ data }) => {
+          //   if (data.jwt) {
+          //     Storage.setItem('token', data.jwt)
+          //     await UserApi.userInfo().then(({data}) => {
+          //       console.log('userInfo', data)
+          //       Storage.setItem('currentUser', JSON.stringify(data))
+          //     })
+          //   }
+          // }).catch((error) => {
+          //   message.error(error.message)
+          // })
         }
       })
     }
