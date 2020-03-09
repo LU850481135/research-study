@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>页面布局</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .layout {
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            clear: both;
+        }
+
+        .left,
+        .right {
+            width: 300px;
+            background: red;
+        }
+
+        .center {
+            background: orange;
+        }
+
+        .float .left {
+            float: left;
+        }
+
+        .float .right {
+            float: right;
+        }
+
+        .position > div {
+            position: absolute;
+        }
+
+        .position .left {
+            left: 0;
+        }
+
+        .position .center {
+            left: 300px;
+            right: 300px;
+        }
+
+        .position .right {
+            right: 0;
+        }
+
+        .flex {
+           display: flex;
+        }
+
+        .flex .center {
+            flex: 1;
+        }
+
+        .table {
+            display: table;
+            width: 100%;
+        }
+
+        .table > div {
+            display: table-cell;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-rows: 100px;
+            grid-template-columns: 300px auto 300px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>浮动解决方案</h1>
+    <div class="layout float">
+        <div class="left">left</div>
+        <div class="right">right</div>
+        <div class="center">center</div>
+    </div>
+    <h1>绝对定位解决方案</h1>
+    <div class="layout position">
+        <div class="left">left</div>
+        <div class="center">center</div>
+        <div class="right">right</div>
+    </div>
+    <h1>flex布局解决方案</h1>
+    <div class="layout flex">
+        <div class="left">left</div>
+        <div class="center">center</div>
+        <div class="right">right</div>
+    </div>
+    <h1>表格布局解决方案</h1>
+    <div class="layout table">
+        <div class="left">left</div>
+        <div class="center">center</div>
+        <div class="right">right</div>
+    </div>
+    <h1>网格布局解决方案</h1>
+    <div class="layout grid">
+        <div class="left">left</div>
+        <div class="center">center</div>
+        <div class="right">right</div>
+    </div>
+</body>
+</html>

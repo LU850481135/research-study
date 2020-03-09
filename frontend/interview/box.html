@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>盒模型</title>
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    p {
+        background: red;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        color: white;
+        margin: 30px;
+    }
+    </style>
+</head>
+<body>
+    <!-- margin合并 -->
+    <p>1</p>
+    <p>2</p>
+    <p>3</p>
+    <!-- 场景1 -->
+    <!-- 创建BFC避免margin重叠 -->
+    <p>1</p>
+    <div style="overflow: hidden;">
+        <p>2</p>
+    </div>
+    <p>3</p>
+    
+    <!-- 场景2 -->
+    <!-- 自适应两栏布局 -->
+    <!-- 不创建BFC，高度大于左栏元素，内容100%显示 -->
+    <!-- BFC元素不与float元素重叠 -->
+    <div class="container">
+        <style>
+            .left {
+                float: left;
+                width: 20%;
+                height: 200px;
+                background: pink;
+            }
+
+            .right {
+                height: 300px;
+                background: orange;
+                /* BFC元素不与float元素重叠 */
+                overflow: auto;
+            }
+        </style>
+        <div class="left">left</div>
+        <div class="right">right</div>
+    </div>
+
+    <!-- 场景3 -->
+    <!-- 子元素浮动，父元素不设置样式的情况下，父元素的高度为0 -->
+    <!-- 清除浮动 -->
+    <!-- 方法：父元素创建BFC -->
+    <div class="float">
+        <style>
+        .float {
+            /* 父元素创建BFC  */
+            overflow: auto;
+        }
+
+        .children {
+            float: left;
+            background: orangered;
+        }
+        </style>
+        <div class="children">children</div>
+    </div>
+</body>
+</html>
