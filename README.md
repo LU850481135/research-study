@@ -641,6 +641,11 @@ rake data:migrate
 ./bin/rails c
 SyncDataJob.perform_now
 
+// 初始化省市区数据
+rails g data_migration init_regions
+
+bin/rails generate migration add_column_to_regions
+
 
 bin/rails db:migrate RAILS_ENV=development
 rake data:migrate
