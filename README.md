@@ -632,3 +632,22 @@ netstat -nap | grep 3000
 
   docker exec bird_server sh -c 'exec psql -U postgres -d bird_development < '
 psql -h 172.17.0.1 -p 25432  -U postgres bird_development < bird_20190819_1402.sql
+
+
+bin/rails generate migration CreateRegions
+bin/rails db:migrate
+rails g data_migration add_data_to_sync_processes
+rake data:migrate
+./bin/rails c
+SyncDataJob.perform_now
+
+// 初始化省市区数据
+rails g data_migration init_regions
+
+bin/rails generate migration add_column_to_regions
+
+
+bin/rails db:migrate RAILS_ENV=development
+rake data:migrate
+./bin/rails c
+SyncDataJob.perform_now
