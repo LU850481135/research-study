@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>响应式原理</title>
+</head>
+<body>
+    <script>
+        // Object.defineProperty()实现数据双向绑定
+        // 缺点：
+        //  - 深度监听，需要递归到底，一次性计算量大
+        //  - 无法监听新增属性以及删除属性
+        //  - 无法原生监听数组，需要特殊处理
+
+        // 重新定义数组原型
+        const arrProperty = Array.prototype;
+        // 创建新对象，原型指向 arrProperty ，再扩展新的方法不会影响原型
+        const newArrProperty = Object.create(arrProperty);
+        ['push', 'pop', 'shift', 'unshift', 'split', 'splice'].forEach(methodName => {
+            newArrProperty[methodName] = function () {
+                updateView()
+                // Array.prototype.push.call(this, ...argements)
+                arrProperty[methodName].call(this, ...arguments)
+            }
+        })
+
+
+        function observe (obj) {
+            if (!obj || typeof obj !== 'object') {
+                return
+            }
+
+            if (Array.isArray(obj)) {
+
+                // 污染全局的array原型
+                // Array.prototype.push = function () {
+                //     updateView()
+                //     // ...
+                // }
+                obj.__proto__ = newArrProperty
+            }
+
+            Object.keys(obj).forEach(key => {
+                defineReactive(obj, key, obj[key])
+            })
+            // for in 可以监听数组
+            // for (key in obj) {
+            //     defineReactive(obj, key, obj[key])
+            // }
+        }
+        function defineReactive (obj, key, value) {
+            // 深度监听
+            observe(value)
+            Object.defineProperty(obj, key, {
+                get () {
+                    return value
+                },
+                set (newVal) {
+                    if (newVal !== value) {
+                        // 深度监听
+                        observe(newVal)
+                        value = newVal
+                        // 触发更新视图
+                        updateView()
+                    }
+                }
+            })
+        }
+
+        function updateView () {
+            console.log('更新视图')
+        }
+
+        var data = { name: 'yck', age: 22, num: [] }
+        observe(data)
+        data.name = 'yyy'
+        data.age = {
+            num: 24
+        }
+        data.age.num = 221
+        data.x = 'test'
+        delete data.name
+
+        data.num.push(10)
+    </script>
+</body>
+</html>

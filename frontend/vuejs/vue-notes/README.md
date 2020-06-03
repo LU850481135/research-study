@@ -478,7 +478,7 @@ Vue.component('scope-content', {
 
 ## 动态组件与v-once指令
 
-```动态组件 <component :is="type" ></component>```
+```动态组件 <component :is="type" ></component>```需要根据数据的类型，动态渲染不同的场景，即组件类型不确定
 ```v-once 第一次加载,放入内存,再次加载时，只需要从内存中读取即可```
 ```v-once可以有效的提高静态内容的展示效率,从而提高性能```
 
